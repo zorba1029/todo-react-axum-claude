@@ -7,6 +7,7 @@ frontend/.env
 backend/target/
 backend/.env
 backend/public/
+backend/mysql-data/
 
 # Dependencies
 **/node_modules/

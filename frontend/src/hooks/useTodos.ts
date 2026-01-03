@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Todo, CreateTodoInput, TodoFilter } from '../types/todo';
+import type { Todo, CreateTodoInput, TodoFilter, UpdateTodoInput } from '../types/todo';
 import { todoApi } from '../api/todoApi';
 
 export function useTodos() {
@@ -54,6 +54,15 @@ export function useTodos() {
     }
   };
 
+  const updateTodo = async (id: number, input: UpdateTodoInput) => {
+    try {
+      const updatedTodo = await todoApi.update(id, input);
+      setTodos((prev) => prev.map((todo) => (todo.id === id ? updatedTodo : todo)));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update todo');
+    }
+  };
+
   const filteredTodos = todos.filter((todo) => {
     if (filter === 'active') return !todo.completed;
     if (filter === 'completed') return todo.completed;
@@ -61,6 +70,7 @@ export function useTodos() {
   });
 
   return {
+    allTodos: todos,
     todos: filteredTodos,
     filter,
     loading,
@@ -68,6 +78,7 @@ export function useTodos() {
     setFilter,
     addTodo,
     toggleTodo,
+    updateTodo,
     deleteTodo,
     refetch: fetchTodos,
   };

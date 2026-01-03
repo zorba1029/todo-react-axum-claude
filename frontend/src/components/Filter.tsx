@@ -12,19 +12,25 @@ export default function Filter({ currentFilter, onFilterChange }: FilterProps) {
     { label: 'Completed', value: 'completed' },
   ];
 
+  const filterLabels: Record<TodoFilter, string> = {
+    all: '전체',
+    active: '진행중',
+    completed: '완료됨',
+  };
+
   return (
-    <div className="flex gap-2 bg-white p-2 rounded-lg shadow-sm border border-gray-200">
+    <div className="flex flex-wrap gap-2">
       {filters.map((filter) => (
         <button
           key={filter.value}
           onClick={() => onFilterChange(filter.value)}
-          className={`px-4 py-2 rounded-md font-medium transition-colors ${
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
             currentFilter === filter.value
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ? 'bg-gradient-to-r from-primary-600 to-fuchsia-500 text-white shadow-md'
+              : 'bg-gray-900/5 text-gray-700 hover:bg-gray-900/10'
           }`}
         >
-          {filter.label}
+          {filterLabels[filter.value]}
         </button>
       ))}
     </div>

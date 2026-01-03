@@ -23,32 +23,34 @@ export default function TodoForm({ onSubmit }: TodoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-      <div className="space-y-4">
-        <div>
+    <form onSubmit={handleSubmit} className="bg-zinc-900/90 px-6 py-5 sm:px-8">
+      <div className="flex items-center gap-3">
+        <div className="flex-1">
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Todo title"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            required
+            placeholder="할 일을 입력하세요"
+            className="w-full bg-transparent text-white placeholder:text-white/60 focus:outline-none text-xl"
           />
-        </div>
-        <div>
-          <textarea
+          <input
+            type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description (optional)"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-            rows={3}
+            placeholder="설명 (선택)"
+            className="mt-2 w-full bg-transparent text-sm text-white/80 placeholder:text-white/40 focus:outline-none"
           />
         </div>
+
         <button
           type="submit"
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+          disabled={!title.trim()}
+          className="group flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 text-white ring-1 ring-white/15 transition-all hover:bg-white/15 hover:ring-white/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="할 일 추가"
         >
-          Add Todo
+          <svg className="w-8 h-8 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
         </button>
       </div>
     </form>

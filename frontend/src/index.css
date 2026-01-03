@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    /* Tailwind v4에서는 일부 gradient 유틸이 @apply에서 제한될 수 있어 CSS로 배경을 지정합니다. */
+    background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 45%, #fce7f3 100%);
+    color: #111827; /* gray-900 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

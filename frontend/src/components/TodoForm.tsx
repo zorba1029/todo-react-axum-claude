@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 import type { CreateTodoInput } from '../types/todo';
 
 interface TodoFormProps {
@@ -23,36 +27,82 @@ export default function TodoForm({ onSubmit }: TodoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-zinc-900/90 px-6 py-5 sm:px-8">
-      <div className="flex items-center gap-3">
-        <div className="flex-1">
-          <input
-            type="text"
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        bgcolor: 'rgba(24, 24, 27, 0.9)',
+        px: { xs: 3, sm: 4 },
+        py: 2.5,
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ flex: 1 }}>
+          <TextField
+            fullWidth
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="할 일을 입력하세요"
-            className="w-full bg-transparent text-white placeholder:text-white/60 focus:outline-none text-xl"
+            variant="standard"
+            InputProps={{
+              disableUnderline: true,
+              sx: {
+                color: 'white',
+                fontSize: '1.25rem',
+                '& input::placeholder': {
+                  color: 'rgba(255, 255, 255, 0.6)',
+                  opacity: 1,
+                },
+              },
+            }}
           />
-          <input
-            type="text"
+          <TextField
+            fullWidth
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="설명 (선택)"
-            className="mt-2 w-full bg-transparent text-sm text-white/80 placeholder:text-white/40 focus:outline-none"
+            variant="standard"
+            InputProps={{
+              disableUnderline: true,
+              sx: {
+                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: '0.875rem',
+                mt: 1,
+                '& input::placeholder': {
+                  color: 'rgba(255, 255, 255, 0.4)',
+                  opacity: 1,
+                },
+              },
+            }}
           />
-        </div>
+        </Box>
 
-        <button
+        <IconButton
           type="submit"
           disabled={!title.trim()}
-          className="group flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 text-white ring-1 ring-white/15 transition-all hover:bg-white/15 hover:ring-white/25 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: 'rgba(255, 255, 255, 0.1)',
+            color: 'white',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            '&:hover': {
+              bgcolor: 'rgba(255, 255, 255, 0.15)',
+              borderColor: 'rgba(255, 255, 255, 0.25)',
+            },
+            '&:active': {
+              transform: 'scale(0.98)',
+            },
+            '&:disabled': {
+              opacity: 0.5,
+              color: 'white',
+            },
+          }}
           aria-label="할 일 추가"
         >
-          <svg className="w-8 h-8 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-        </button>
-      </div>
-    </form>
+          <AddIcon sx={{ fontSize: 32 }} />
+        </IconButton>
+      </Box>
+    </Box>
   );
 }

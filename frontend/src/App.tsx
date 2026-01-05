@@ -1,7 +1,17 @@
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import Chip from '@mui/material/Chip';
 import { useTodos } from './hooks/useTodos';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import Filter from './components/Filter';
+import theme from './theme';
 
 function App() {
   const {
@@ -22,68 +32,140 @@ function App() {
   const completedCount = allTodos.filter((t) => t.completed).length;
 
   return (
-    <div className="min-h-screen py-10 sm:py-12">
-      <div className="relative mx-auto max-w-3xl px-4">
-        {/* Decorative blobs */}
-        <div className="pointer-events-none absolute -top-10 left-[-60px] h-44 w-44 rounded-full bg-fuchsia-300/50 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-16 right-[-80px] h-56 w-56 rounded-full bg-indigo-300/50 blur-3xl" />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box
+        sx={{
+          minHeight: '100vh',
+          py: { xs: 5, sm: 6 },
+          background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+          position: 'relative',
+        }}
+      >
+        <Container maxWidth="md">
+          {/* Decorative blobs */}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: -40,
+              left: -60,
+              width: 176,
+              height: 176,
+              borderRadius: '50%',
+              background: 'rgba(233, 121, 249, 0.3)',
+              filter: 'blur(64px)',
+              pointerEvents: 'none',
+            }}
+          />
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: -64,
+              right: -80,
+              width: 224,
+              height: 224,
+              borderRadius: '50%',
+              background: 'rgba(165, 180, 252, 0.3)',
+              filter: 'blur(64px)',
+              pointerEvents: 'none',
+            }}
+          />
 
-        <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-black/5">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 px-6 py-12 text-center text-white sm:px-10">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">일정관리</h1>
-            <p className="mt-2 text-white/90">오늘 할 일을 깔끔하게 정리해보세요</p>
-          </div>
+          <Paper
+            elevation={24}
+            sx={{
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 4,
+            }}
+          >
+            {/* Header */}
+            <Box
+              sx={{
+                background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #d946ef 100%)',
+                px: { xs: 3, sm: 5 },
+                py: 6,
+                textAlign: 'center',
+                color: 'white',
+              }}
+            >
+              <Typography variant="h3" component="h1" sx={{ fontWeight: 800, mb: 1 }}>
+                일정관리
+              </Typography>
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                오늘 할 일을 깔끔하게 정리해보세요
+              </Typography>
+            </Box>
 
-          {/* Input bar */}
-          <TodoForm onSubmit={addTodo} />
+            {/* Input bar */}
+            <TodoForm onSubmit={addTodo} />
 
-          {/* Toolbar */}
-          <div className="flex flex-col gap-3 bg-white/80 px-6 py-4 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <Filter currentFilter={filter} onFilterChange={setFilter} />
-            <div className="flex items-center gap-2 text-sm">
-              <span className="rounded-full bg-gray-900/5 px-3 py-1 font-medium text-gray-700">
-                전체 {totalCount}
-              </span>
-              <span className="rounded-full bg-amber-500/10 px-3 py-1 font-medium text-amber-700">
-                진행중 {activeCount}
-              </span>
-              <span className="rounded-full bg-emerald-500/10 px-3 py-1 font-medium text-emerald-700">
-                완료 {completedCount}
-              </span>
-            </div>
-          </div>
+            {/* Toolbar */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: 1.5,
+                alignItems: { xs: 'stretch', sm: 'center' },
+                justifyContent: 'space-between',
+                bgcolor: 'rgba(255, 255, 255, 0.8)',
+                px: { xs: 3, sm: 4 },
+                py: 2,
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <Filter currentFilter={filter} onFilterChange={setFilter} />
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label={`전체 ${totalCount}`} size="small" sx={{ fontWeight: 600 }} />
+                <Chip
+                  label={`진행중 ${activeCount}`}
+                  size="small"
+                  sx={{ bgcolor: 'rgba(245, 158, 11, 0.1)', color: 'rgb(180, 83, 9)', fontWeight: 600 }}
+                />
+                <Chip
+                  label={`완료 ${completedCount}`}
+                  size="small"
+                  sx={{ bgcolor: 'rgba(16, 185, 129, 0.1)', color: 'rgb(6, 95, 70)', fontWeight: 600 }}
+                />
+              </Box>
+            </Box>
 
-          {error && (
-            <div className="mx-6 mb-4 bg-red-50/90 border border-red-200 text-red-700 px-4 py-3 rounded-xl sm:mx-8">
-              <p className="font-medium">{error}</p>
-            </div>
-          )}
-
-          {/* List */}
-          <div className="bg-white">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="flex items-center gap-3 text-gray-500">
-                  <svg className="animate-spin h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  <span>로딩 중...</span>
-                </div>
-              </div>
-            ) : (
-              <TodoList
-                todos={todos}
-                onToggle={toggleTodo}
-                onUpdate={updateTodo}
-                onDelete={deleteTodo}
-              />
+            {error && (
+              <Box sx={{ px: { xs: 3, sm: 4 }, pt: 2 }}>
+                <Alert severity="error" sx={{ borderRadius: 2 }}>
+                  {error}
+                </Alert>
+              </Box>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+
+            {/* List */}
+            <Box sx={{ bgcolor: 'white' }}>
+              {loading ? (
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    py: 10,
+                    gap: 2,
+                  }}
+                >
+                  <CircularProgress size={24} />
+                  <Typography color="text.secondary">로딩 중...</Typography>
+                </Box>
+              ) : (
+                <TodoList
+                  todos={todos}
+                  onToggle={toggleTodo}
+                  onUpdate={updateTodo}
+                  onDelete={deleteTodo}
+                />
+              )}
+            </Box>
+          </Paper>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 }
 

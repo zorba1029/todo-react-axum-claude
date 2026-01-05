@@ -8,7 +8,9 @@ A full-stack todo list application built with modern technologies.
 - **React** - UI library
 - **TypeScript** - Type-safe JavaScript
 - **Vite** - Fast build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
+- **Material UI (MUI)** - React component library implementing Material Design
+- **@mui/icons-material** - 2,000+ Material Design icons
+- **Emotion** - CSS-in-JS styling (MUI peer dependency)
 
 ### Backend
 - **Rust** - Systems programming language
@@ -38,7 +40,7 @@ Benefits of this approach:
 todo-list/
 ├── frontend/                # React/TypeScript/Vite frontend
 │   ├── src/
-│   │   ├── components/      # React components
+│   │   ├── components/      # React components (using MUI)
 │   │   │   ├── TodoList.tsx
 │   │   │   ├── TodoItem.tsx
 │   │   │   ├── TodoForm.tsx
@@ -49,17 +51,16 @@ todo-list/
 │   │   │   └── todo.ts
 │   │   ├── api/             # API client functions
 │   │   │   └── todoApi.ts
-│   │   ├── App.tsx          # Main application component
+│   │   ├── theme.ts         # MUI custom theme configuration
+│   │   ├── App.tsx          # Main application component with ThemeProvider
 │   │   ├── App.css          # Component styles
 │   │   ├── main.tsx         # Application entry point
-│   │   └── index.css        # Global styles with Tailwind
+│   │   └── index.css        # Global styles
 │   ├── public/              # Static assets
 │   │   └── vite.svg
 │   ├── index.html
 │   ├── package.json
 │   ├── vite.config.ts
-│   ├── tailwind.config.js
-│   ├── postcss.config.js
 │   └── tsconfig.json
 │
 ├── backend/                 # Rust/Axum backend
@@ -347,6 +348,42 @@ USE tododb;
 SELECT * FROM todos;
 ```
 
+## Material UI Theme
+
+The application uses a custom Material UI theme with purple/fuchsia gradient colors:
+
+### Theme Configuration (`frontend/src/theme.ts`)
+
+```typescript
+- Primary Color: #7c3aed (violet-600)
+- Secondary Color: #d946ef (fuchsia-500)
+- Custom gradient: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%)
+- Border radius: 12px
+- Font family: System fonts (-apple-system, BlinkMacSystemFont, etc.)
+```
+
+### Material UI Components Used
+
+- **Layout**: Box, Container, Paper, List, ListItem
+- **Typography**: Typography with various variants (h1-h6, body1-body2)
+- **Form Controls**: TextField, Button, IconButton, Checkbox
+- **Feedback**: CircularProgress, Alert, Chip
+- **Icons**: AddIcon, EditIcon, DeleteIcon, CheckBoxIcon, CheckCircleOutlineIcon, and more
+
+### Styling Approach
+
+- Uses MUI's `sx` prop for component-level styling
+- Emotion CSS-in-JS for dynamic styling
+- ThemeProvider wraps the entire application for consistent theming
+- Responsive breakpoints: `xs`, `sm`, `md`, `lg`, `xl`
+
+### Icons
+
+All icons are imported from `@mui/icons-material`:
+- Browse available icons: https://mui.com/material-ui/material-icons/
+- 2,000+ icons covering most use cases
+- Consistent Material Design aesthetic
+
 ## Features
 
 ### Core Features
@@ -358,14 +395,17 @@ SELECT * FROM todos;
 - Todo counter badges (total, active, completed)
 
 ### Frontend Features
-- Modern gradient design with Tailwind CSS
-- Fully responsive design
+- Modern Material Design with custom purple/fuchsia gradient theme
+- Material UI (MUI) components throughout (Box, Paper, Typography, TextField, Button, etc.)
+- 2,000+ Material Design icons (@mui/icons-material)
+- Fully responsive design with MUI breakpoints
 - Real-time updates
-- Loading and error states
+- Loading and error states (CircularProgress, Alert)
 - Inline editing with edit/cancel functionality
 - Form validation
-- Animated UI transitions
+- Smooth UI transitions and animations
 - Korean language UI (일정관리)
+- Custom theme with violet (#7c3aed) and fuchsia (#d946ef) colors
 
 ### Backend Features
 - RESTful API design
@@ -395,6 +435,7 @@ SELECT * FROM todos;
 - Clear Vite cache: `rm -rf node_modules/.vite`
 - Verify build output: `npm run build` should create `dist/` directory
 - Check that `dist/index.html` exists
+- MUI packages installed: `@mui/material`, `@mui/icons-material`, `@emotion/react`, `@emotion/styled`
 
 ### Backend Compilation Issues
 - Update Rust toolchain: `rustup update`
@@ -543,12 +584,13 @@ VITE_API_URL=https://your-backend-domain.com/api
 - **Search Functionality**: Search todos by title/description
 
 ### Medium Priority
-- **Dark Mode**: Toggle between light and dark themes
+- **Dark Mode**: Toggle between light and dark themes (MUI has built-in dark mode support)
 - **Bulk Operations**: Select multiple todos for bulk delete/complete
 - **Todo Sorting**: Sort by date, priority, alphabetical
 - **Data Export/Import**: Export todos as JSON/CSV
 - **Subtasks**: Break down todos into smaller tasks
 - **Internationalization**: Multi-language support (currently Korean only)
+- **Additional MUI Components**: Drawer, Dialog, Snackbar for enhanced UX
 
 ### Low Priority
 - **Notifications/Reminders**: Browser notifications for due dates

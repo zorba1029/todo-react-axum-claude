@@ -11,7 +11,10 @@ pub async fn get_todos(
     State(pool): State<Pool<MySql>>,
 ) -> Result<Json<Vec<Todo>>, (StatusCode, String)> {
     let todos = sqlx::query_as::<_, Todo>(
-        "SELECT id, title, description, completed, created_at, updated_at FROM todos ORDER BY created_at DESC"
+        "SELECT id, title, description, completed, created_at, updated_at 
+              FROM todos 
+              ORDER BY created_at 
+              DESC"
     )
     .fetch_all(&pool)
     .await
@@ -28,7 +31,9 @@ pub async fn get_todo(
     Path(id): Path<i32>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
     let todo = sqlx::query_as::<_, Todo>(
-        "SELECT id, title, description, completed, created_at, updated_at FROM todos WHERE id = ?"
+        "SELECT id, title, description, completed, created_at, updated_at 
+              FROM todos 
+              WHERE id = ?"
     )
     .bind(id)
     .fetch_one(&pool)
@@ -49,7 +54,8 @@ pub async fn create_todo(
     Json(input): Json<CreateTodoInput>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
     let result = sqlx::query(
-        "INSERT INTO todos (title, description, completed) VALUES (?, ?, false)"
+        "INSERT INTO todos (title, description, completed) 
+              VALUES (?, ?, false)"
     )
     .bind(&input.title)
     .bind(&input.description)
@@ -61,7 +67,9 @@ pub async fn create_todo(
     })?;
 
     let todo = sqlx::query_as::<_, Todo>(
-        "SELECT id, title, description, completed, created_at, updated_at FROM todos WHERE id = ?"
+        "SELECT id, title, description, completed, created_at, updated_at 
+              FROM todos 
+              WHERE id = ?"
     )
     .bind(result.last_insert_id())
     .fetch_one(&pool)
@@ -80,7 +88,9 @@ pub async fn update_todo(
     Json(input): Json<UpdateTodoInput>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
     let existing = sqlx::query_as::<_, Todo>(
-        "SELECT id, title, description, completed, created_at, updated_at FROM todos WHERE id = ?"
+        "SELECT id, title, description, completed, created_at, updated_at 
+              FROM todos 
+              WHERE id = ?"
     )
     .bind(id)
     .fetch_one(&pool)
@@ -102,7 +112,8 @@ pub async fn update_todo(
     let completed = input.completed.unwrap_or(existing.completed);
 
     sqlx::query(
-        "UPDATE todos SET title = ?, description = ?, completed = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+        "UPDATE todos SET title = ?, description = ?, completed = ?, updated_at = CURRENT_TIMESTAMP 
+              WHERE id = ?"
     )
     .bind(&title)
     .bind(&description)
@@ -116,7 +127,9 @@ pub async fn update_todo(
     })?;
 
     let todo = sqlx::query_as::<_, Todo>(
-        "SELECT id, title, description, completed, created_at, updated_at FROM todos WHERE id = ?"
+        "SELECT id, title, description, completed, created_at, updated_at 
+              FROM todos 
+              WHERE id = ?"
     )
     .bind(id)
     .fetch_one(&pool)
@@ -154,7 +167,8 @@ pub async fn toggle_todo(
     Path(id): Path<i32>,
 ) -> Result<Json<Todo>, (StatusCode, String)> {
     sqlx::query(
-        "UPDATE todos SET completed = NOT completed, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+        "UPDATE todos SET completed = NOT completed, updated_at = CURRENT_TIMESTAMP 
+              WHERE id = ?"
     )
     .bind(id)
     .execute(&pool)
@@ -165,7 +179,9 @@ pub async fn toggle_todo(
     })?;
 
     let todo = sqlx::query_as::<_, Todo>(
-        "SELECT id, title, description, completed, created_at, updated_at FROM todos WHERE id = ?"
+        "SELECT id, title, description, completed, created_at, updated_at 
+              FROM todos 
+              WHERE id = ?"
     )
     .bind(id)
     .fetch_one(&pool)
